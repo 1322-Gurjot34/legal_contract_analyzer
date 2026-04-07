@@ -21,4 +21,7 @@ Legal Contract Analyzer i:contentReference[oaicite:0]{index=0}o upload PDF contr
 ## Run Locally
 
 ```bash
-streamlit run app.py
+git clone https://github.com/1322-Gurjot34/legal_contract_analyzer.git
+cd legal_contract_ai
+pip install -r requirements.txt
+python -m streamlit run app.py
