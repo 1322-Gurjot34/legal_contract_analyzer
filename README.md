@@ -3,13 +3,13 @@
 Legal Contract Analyzer i:contentReference[oaicite:0]{index=0}o upload PDF contracts and analyze them.
 
 ## Features
-- Contract summary
-- Contract type detection
-- Key information extraction
-- Risk detection
-- Contract score
-- Clause extraction
-- PDF report download
+- User Login & Signup
+- Upload and Analyze Contracts
+- Contract Comparison
+- Risk Detection & Scoring
+- PDF Report Download
+- User-specific Upload History
+- Feedback & Complaint System
 
 ## Technologies Used
 - Python

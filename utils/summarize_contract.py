@@ -1,44 +1,43 @@
 def summarize_contract(text):
-    sentences = text.replace("\n", " ").split(".")
+    import re
+    from collections import Counter
 
-    important_keywords = [
-        "agreement",
-        "payment",
-        "fee",
-        "cost",
-        "salary",
-        "terminate",
-        "termination",
-        "confidential",
-        "non disclosure",
-        "renew",
-        "renewal",
-        "extension",
-        "penalty",
-        "fine",
-        "liability",
-        "obligation",
-        "party",
-        "deadline",
-        "delivery",
-        "notice"
+    # Clean text
+    text = text.replace("\n", " ")
+    sentences = re.split(r'(?<=[.!?]) +', text)
+
+    # Remove very short/long sentences
+    sentences = [s.strip() for s in sentences if 40 < len(s) < 250]
+
+    # Keywords (weighted importance)
+    keywords = [
+        "agreement", "payment", "fee", "cost", "salary",
+        "terminate", "termination", "confidential",
+        "renewal", "extension", "penalty", "liability",
+        "obligation", "deadline", "notice", "risk"
     ]
 
-    summary_points = []
+    # Count keyword frequency in whole text
+    word_freq = Counter(text.lower().split())
+
+    sentence_scores = {}
 
     for sentence in sentences:
-        sentence = sentence.strip()
+        score = 0
+        words = sentence.lower().split()
 
-        if len(sentence) < 40:
-            continue
+        for word in words:
+            if word in word_freq:
+                score += word_freq[word]
 
-        for keyword in important_keywords:
-            if keyword.lower() in sentence.lower():
-                if sentence not in summary_points:
-                    summary_points.append(sentence)
-                break
+        # Boost score if important keywords present
+        for keyword in keywords:
+            if keyword in sentence.lower():
+                score += 20
 
-    if len(summary_points) == 0:
-        summary_points = sentences[:5]
+        sentence_scores[sentence] = score
 
-    return summary_points[:7]
+    # Get top 5 best sentences
+    best_sentences = sorted(sentence_scores, key=sentence_scores.get, reverse=True)[:5]
+
+    return best_sentences

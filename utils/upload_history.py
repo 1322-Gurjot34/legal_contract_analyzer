@@ -1,16 +1,27 @@
+import json
 import os
 
-HISTORY_FILE = "upload_history.txt"
+FILE = "upload_history.json"
 
-def save_upload_history(filename):
-    with open(HISTORY_FILE, "a", encoding="utf-8") as file:
-        file.write(filename + "\n")
+def load_history():
+    if not os.path.exists(FILE):
+        return {}
+    with open(FILE, "r") as f:
+        return json.load(f)
 
-def get_upload_history():
-    if not os.path.exists(HISTORY_FILE):
-        return []
+def save_history(data):
+    with open(FILE, "w") as f:
+        json.dump(data, f)
 
-    with open(HISTORY_FILE, "r", encoding="utf-8") as file:
-        history = file.readlines()
+def save_upload_history(username, filename):
+    data = load_history()
 
-    return [item.strip() for item in history]
+    if username not in data:
+        data[username] = []
+
+    data[username].append(filename)
+    save_history(data)
+
+def get_upload_history(username):
+    data = load_history()
+    return data.get(username, [])
